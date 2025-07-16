@@ -186,4 +186,13 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+// Add custom message routes for /api and /api/root
+app.get('/api', (req, res) => {
+  res.send('StudLyf Backend API is running!');
+});
+
+app.get('/api/root', (req, res) => {
+  res.send('StudLyf Backend API is running! (root endpoint)');
+});
+
 module.exports = app;
