@@ -1,0 +1,15 @@
+{
+  "name": "studlyf-backend",
+  "version": "1.0.0",
+  "main": "api.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node server.cjs"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.6.3",
+    "mongodb": "^5.7.0",
+    "cors": "^2.8.5"
+  }
+} 
