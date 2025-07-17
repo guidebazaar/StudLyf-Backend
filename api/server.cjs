@@ -6,7 +6,7 @@ const { MongoClient } = require('mongodb');
 const app = express();
 const allowedOrigins = [
   'http://localhost:8080',
-  'https://studlife.in'
+  'https://studlyf.in/'
 ];
 app.use(cors({
   origin: allowedOrigins,
