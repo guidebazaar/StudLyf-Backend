@@ -4,7 +4,14 @@ const cors = require('cors');
 const { MongoClient } = require('mongodb');
 
 const app = express();
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:8080',
+  'https://studlife.in'
+];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json({ limit: '20kb' }));
 
 const mongoUri = process.env.MONGO_URI;
@@ -44,8 +51,8 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', function(next) {
   const docSize = Buffer.byteLength(JSON.stringify(this.toObject()));
-  if (docSize > 15 * 1024) {
-    return next(new Error('Profile data exceeds 15KB limit.'));
+  if (docSize > 100 * 1024) {
+    return next(new Error('Profile data exceeds 100KB limit.'));
   }
   next();
 });
@@ -87,7 +94,7 @@ app.post('/api/profile/:uid', async (req, res) => {
   try {
     const data = req.body;
     if (Buffer.byteLength(JSON.stringify(data)) > 100 * 1024) {
-      return res.status(400).json({ error: 'Profile data exceeds 15KB limit.' });
+      return res.status(400).json({ error: 'Profile data exceeds 100KB limit.' });
     }
     data._id = req.params.uid;
     const user = await User.findByIdAndUpdate(
@@ -184,6 +191,15 @@ app.get('/api/users', async (req, res) => {
   } finally {
     await client.close();
   }
+});
+
+// Add custom message routes for /api and /api/root
+app.get('/api', (req, res) => {
+  res.send('StudLyf Backend API is running!');
+});
+
+app.get('/api/root', (req, res) => {
+  res.send('StudLyf Backend API is running! (root endpoint)');
 });
 
 module.exports = app;
