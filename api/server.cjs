@@ -203,8 +203,4 @@ app.get('/api/root', (req, res) => {
   res.send('StudLyf Backend API is running! (root endpoint)');
 });
 
-<<<<<<< HEAD
 module.exports = app;
-=======
-module.exports = app;
->>>>>>> fc7fd2e7afc7f2a227352d8f2af1b1b92079a311
