@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', function(next) {
   const docSize = Buffer.byteLength(JSON.stringify(this.toObject()));
-  if (docSize > 15 * 1024) {
+  if (docSize > 100 * 1024) {
     return next(new Error('Profile data exceeds 15KB limit.'));
   }
   next();
