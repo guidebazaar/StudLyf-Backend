@@ -1,12 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { MongoClient } = require('mongodb');
 
 const app = express();
 const allowedOrigins = [
   'http://localhost:8080',
-  'https://studlyf.in/'
+  'https://studlyf.in'
 ];
 app.use(cors({
   origin: allowedOrigins,
@@ -53,7 +52,6 @@ userSchema.pre('save', function(next) {
   const docSize = Buffer.byteLength(JSON.stringify(this.toObject()));
   if (docSize > 100 * 1024) {
     return next(new Error('Profile data exceeds 100KB limit.'));
-    return next(new Error('Profile data exceeds 15KB limit.'));
   }
   next();
 });
@@ -166,31 +164,25 @@ app.get('/api/messages/:uid1/:uid2', async (req, res) => {
   res.json(msgs);
 });
 
+// Use Mongoose for /api/users
 app.get('/api/users', async (req, res) => {
-  const client = new MongoClient(process.env.MONGO_URI);
   try {
-    await client.connect();
-    const db = client.db('student_database');
-    const users = await db.collection('users').find({}, {
-      projection: {
-        _id: 1,
-        firstName: 1,
-        profilePicture: 1,
-        bio: 1,
-        skills: 1,
-        interests: 1,
-        college: 1,
-        year: 1,
-        branch: 1,
-        city: 1,
-        isOnline: 1
-      }
-    }).toArray();
+    const users = await User.find({}, {
+      _id: 1,
+      firstName: 1,
+      profilePicture: 1,
+      bio: 1,
+      skills: 1,
+      interests: 1,
+      college: 1,
+      year: 1,
+      branch: 1,
+      city: 1,
+      isOnline: 1
+    });
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch users' });
-  } finally {
-    await client.close();
   }
 });
 
